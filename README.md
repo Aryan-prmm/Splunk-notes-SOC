@@ -78,6 +78,39 @@ This pattern may indicate that an attacker successfully guessed valid credential
 ### Analyst Note
 Correct time-range selection and field discovery were required. The relevant IP-related field in this environment is `Source_Network_Address`.
 
+## Use Case 3: Login Outside Business Hours
+
+### Objective
+Detect potentially suspicious login activity occurring outside normal business hours.
+
+### Logs Used
+- Windows Security Event Logs
+- EventCode 4624 (Successful login)
+
+### SPL Query
+```spl
+index=main EventCode=4624
+| eval hour=strftime(_time,"%H")
+| where hour < 8 OR hour > 19
+| table _time hour AccountName Source_Network_Address
+```
+### Observation
+Successful login events were observed during late night or early morning hours.
+
+### SOC Analysis
+Logins outside business hours may indicate compromised credentials or unauthorized access, especially for non-administrative users.
+
+### Action Taken
+- Verify login activity with the user
+- Check user role and geolocation
+- Escalate if activity is abnormal
+
+### False Positive Consideration
+- Administrators working after hours
+- Scheduled maintenance or batch jobs
+
+
+
 
 
 

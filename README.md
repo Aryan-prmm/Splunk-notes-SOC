@@ -109,6 +109,39 @@ Logins outside business hours may indicate compromised credentials or unauthoriz
 - Administrators working after hours
 - Scheduled maintenance or batch jobs
 
+## Use Case 4: Account Lockout Detection
+
+### Objective
+Detect account lockout events caused by repeated failed login attempts.
+
+### Logs Used
+- Windows Security Event Logs
+- EventCode 4740 (Account locked out)
+- EventCode 4625 (Failed login)
+
+### SPL Query
+```spl
+index=main (EventCode=4625 OR EventCode=4740)
+| table _time EventCode AccountName Source_Network_Address
+```
+
+### Observation
+Multiple failed login attempts were observed for an account followed by an account lockout event.
+
+### SOC Analysis
+An account lockout after repeated authentication failures strongly indicates a brute-force attack attempt and increases the confidence level of malicious activity.
+
+### Action Taken
+- Notify user and IT support
+- Unlock or reset the affected account
+- Block or monitor the source network address
+
+### False Positive Consideration
+- User repeatedly entered incorrect credentials
+- Misconfigured application or service using old credentials
+
+
+
 
 
 

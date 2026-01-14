@@ -140,6 +140,41 @@ An account lockout after repeated authentication failures strongly indicates a b
 - User repeatedly entered incorrect credentials
 - Misconfigured application or service using old credentials
 
+###  Use Case 5: Severity, Priority, and Escalation Assessment
+
+### Objective
+Assess the severity and priority of detected authentication-related incidents and determine when escalation is required.
+
+### Logs Used
+- Windows Security Event Logs
+- EventCode 4625 (Failed login)
+- EventCode 4624 (Successful login)
+- EventCode 4740 (Account locked out)
+
+### SPL Query
+``` spl
+index=main (EventCode=4624 OR EventCode=4625 OR EventCode=4740)
+| stats count by EventCode
+```
+### Observation
+
+Authentication-related events such as failed logins, successful logins after failures, and account lockouts were observed with varying frequency and impact on user accounts.
+
+### SOC Analysis
+
+Severity is determined based on the confidence of malicious activity and the impact on affected accounts. Failed login attempts alone represent lower severity, while account lockouts and correlated failure-to-success patterns increase confidence and severity. Priority is influenced by the importance of the affected account and urgency of response.
+
+### Action Taken
+
+- Classify incidents based on severity and priority
+- Escalate confirmed attack patterns to SOC Tier 2
+- Notify affected users or IT support when required
+
+### False Positive Consideration
+- User repeatedly entering incorrect credentials
+- Administrative or maintenance activities
+- Misconfigured applications using outdated credentials
+
 
 
 
